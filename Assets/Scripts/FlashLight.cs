@@ -4,49 +4,43 @@ using UnityEngine.UI;
 public class FlashLight : MonoBehaviour
 {
     [SerializeField]
-    private Light _flashLight;
+    private Light flashLight;
+
+    [SerializeField]
+    private float maxBatteryLife, lightDrain;
+
+    [SerializeField]
+    private Image batteryIndicator;
+
+    private float curBatteryLife;
     private bool isOn = true;
 
-    [SerializeField]
-    private float _batteryLife, _lightDrain;
-
-    private float _currentBatteryLife;
-
-    [SerializeField]
-    private Image _batteryIdicator;
-
-    // Start is called before the first frame update
-    private void Start()
-    {
-        _currentBatteryLife = _batteryLife;
+    private void Start(){
+        // заполняем заряд максимальным значением на старте
+        curBatteryLife = maxBatteryLife;
     }
 
-    // Update is called once per frame
-    private void Update()
-    {
-        _flashLight.intensity = _currentBatteryLife;
-
-        if(Input.GetKeyDown(KeyCode.F))
-        {
+    private void Update(){
+        if(Input.GetKeyDown(KeyCode.F)){
             isOn = !isOn;
-            _flashLight.enabled = isOn;
+            flashLight.enabled = isOn;
         }
-
-        if(isOn)
-        {
-            if(_currentBatteryLife > 0)
-            {
-                _currentBatteryLife -= _lightDrain * Time.deltaTime;
-                Debug.Log("Current Battery: " + _currentBatteryLife);
-                Vector3 batterySize = new Vector3(_currentBatteryLife / _batteryLife, _batteryIdicator.transform.localScale.y, _batteryIdicator.transform.localScale.z);
-                _batteryIdicator.transform.localScale = batterySize;
-            }
-            else
-            {
-                _currentBatteryLife = 0;
+        if(isOn == true){
+            if(curBatteryLife > 0){
+                curBatteryLife -= lightDrain * Time.deltaTime;
+                flashLight.intensity = curBatteryLife;
+                Vector3 batterySize = new Vector3(curBatteryLife / maxBatteryLife,1,1);
+                batteryIndicator.transform.localScale = batterySize;
+            }else{
+                // если заряд вышел, выключить фонарик
+                curBatteryLife = 0;
                 isOn = false;
-                _flashLight.enabled = false;
+                flashLight.enabled = false;
             }
         }
+    }
+
+    public void AddEnergy(){
+        curBatteryLife = maxBatteryLife;
     }
 }
