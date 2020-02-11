@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityStandardAssets.Characters.FirstPerson;
 
@@ -34,7 +36,7 @@ public class InteractionManager : MonoBehaviour{
     [SerializeField]
     private Light candleLight;
 
-    private bool isReading, hasKey;
+    private bool isReading;
 
     private void Start(){
         candleLight.enabled = false;
@@ -46,7 +48,6 @@ public class InteractionManager : MonoBehaviour{
         woodBoxPanel.SetActive(false);
 
         isReading = false;
-        hasKey = false;
         
         firstDigitAddButton.onClick.AddListener(() => AddDigit(1));
         secondDigitAddButton.onClick.AddListener(() => AddDigit(2));
@@ -98,12 +99,7 @@ public class InteractionManager : MonoBehaviour{
         }
 
         string code = firstDigit.text + secondDigit.text + thirdDigit.text + fourthDigit.text;
-        if(CheckCode(code))
-        {
-            Destroy(woodBox);
-            woodBoxPanel.SetActive(false);
-            gameObject.GetComponentsInParent<RigidbodyFirstPersonController>()[0].enabled = true;
-        }
+        CheckCode(code);
     }
 
     private void MinusDigit(int id)
@@ -145,17 +141,18 @@ public class InteractionManager : MonoBehaviour{
         }
 
         string code = firstDigit.text + secondDigit.text + thirdDigit.text + fourthDigit.text;
-        if(CheckCode(code))
+        CheckCode(code);
+    }
+
+    private void CheckCode(string code)
+    {
+        if(code == woodBoxCode.GetCode())
         {
-            Destroy(woodBox);
+            woodBox.GetComponentInChildren<WoodBox>().Open();
+            woodBox.GetComponent<BoxCollider>().enabled = false;
             woodBoxPanel.SetActive(false);
             gameObject.GetComponentsInParent<RigidbodyFirstPersonController>()[0].enabled = true;
         }
-    }
-
-    private bool CheckCode(string code)
-    {
-        return woodBoxCode.GetCode() == code;
     }
 
     private void Update(){
@@ -182,22 +179,25 @@ public class InteractionManager : MonoBehaviour{
                     paperPanel.SetActive(true);
                     isReading = true;
                     gameObject.GetComponentsInParent<RigidbodyFirstPersonController>()[0].enabled = false;
+
+                    string text = raycastHit.transform.gameObject.GetComponent<Paper>().GetText();
+
+                    paperPanel.GetComponent<PaperPanel>().SetText(text);
                 }
                 else if(raycastHit.transform.tag == "Key")
                 {
-                    hasKey = true;
-                    Destroy(raycastHit.transform.gameObject);
+                    Key key = raycastHit.transform.gameObject.GetComponent<Key>();
+                    if(key != null)
+                    {
+                        key.PickUp();
+                    }
                 }
                 else if(raycastHit.transform.tag == "Door")
                 {
-                    if(hasKey)
+                    Door door = raycastHit.transform.gameObject.GetComponent<Door>();
+                    if(door != null)
                     {
-                        Debug.Log("Opened door");
-                        hasKey = false;
-                    }
-                    else
-                    {
-                        Debug.Log("You don't have a key");
+                        door.ChangeDoorState();
                     }
                 }
                 else if(raycastHit.transform.tag == "WoodCodeBox")
