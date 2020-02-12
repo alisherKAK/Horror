@@ -36,7 +36,11 @@ public class InteractionManager : MonoBehaviour{
     [SerializeField]
     private Light candleLight;
 
+    [SerializeField]
+    private Door doorPaper;
+
     private bool isReading;
+    private int readPaper;
 
     private void Start(){
         candleLight.enabled = false;
@@ -48,6 +52,7 @@ public class InteractionManager : MonoBehaviour{
         woodBoxPanel.SetActive(false);
 
         isReading = false;
+        readPaper = 0;
         
         firstDigitAddButton.onClick.AddListener(() => AddDigit(1));
         secondDigitAddButton.onClick.AddListener(() => AddDigit(2));
@@ -183,6 +188,13 @@ public class InteractionManager : MonoBehaviour{
                     string text = raycastHit.transform.gameObject.GetComponent<Paper>().GetText();
 
                     paperPanel.GetComponent<PaperPanel>().SetText(text);
+
+                    readPaper++;
+
+                    if(readPaper == 3)
+                    {
+                        doorPaper.UseKey();
+                    }
                 }
                 else if(raycastHit.transform.tag == "Key")
                 {
@@ -209,6 +221,10 @@ public class InteractionManager : MonoBehaviour{
                 else if(raycastHit.transform.tag == "Candle")
                 {
                     candleLight.enabled = !candleLight.enabled;
+                }
+                else if(raycastHit.transform.tag == "Pill")
+                {
+                    
                 }
             }
             else if(Input.GetKeyDown(KeyCode.Escape))
