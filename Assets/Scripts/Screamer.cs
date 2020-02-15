@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Screamer : MonoBehaviour
 {
@@ -9,6 +7,10 @@ public class Screamer : MonoBehaviour
 
     [SerializeField]
     private AudioSource audioScream;
+
+    [SerializeField]
+    private Transform nearScream;
+
     private float destroyTime = 3f;
 
     private void Start(){
@@ -18,6 +20,7 @@ public class Screamer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) {
         if(other.tag == "Player"){
+            nearScream.GetComponent<NearScreamer>().StopAudio();
             // show image
             screamerImage.gameObject.SetActive(true);
             // play sound
@@ -26,6 +29,8 @@ public class Screamer : MonoBehaviour
             Destroy(gameObject, destroyTime);
             // уничтожаем картинку
             Destroy(screamerImage.gameObject, destroyTime);
+
+            Destroy(nearScream.gameObject, destroyTime);
         }
     }
 }

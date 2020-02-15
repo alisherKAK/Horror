@@ -219,6 +219,7 @@ GameObject:
   - component: {fileID: 11400004}
   - component: {fileID: 1969598114}
   - component: {fileID: 2287304100238425593}
+  - component: {fileID: 1120208613}
   m_Layer: 0
   m_Name: RigidBodyFPSController
   m_TagString: Player
@@ -370,6 +371,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flashLight: {fileID: 1579799320}
   audioClip: {fileID: 8300000, guid: cd47940252c3aab4fabb6a2fcb00b621, type: 3}
+--- !u!114 &1120208613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca299d361b386e549a4bad90383f4504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealthPoint: 100
+  healthIndecator: {fileID: 0}
+  gameOverPanel: {fileID: 0}
 --- !u!1 &1579799318
 GameObject:
   m_ObjectHideFlags: 0

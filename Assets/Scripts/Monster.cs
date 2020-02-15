@@ -17,6 +17,9 @@ public class Monster : MonoBehaviour
     [SerializeField]
     private Transform eyes;
 
+    [SerializeField]
+    private AudioSource scream;
+
     private string state = "idle";
     private bool isAlive = true;
     private float waitTime = 2f;
@@ -72,6 +75,8 @@ public class Monster : MonoBehaviour
                 {
                     return;
                 }
+
+                scream.Play();
 
                 state = "chase";
                 navMesh.speed = 2f;

@@ -12,6 +12,7 @@ TagManager:
   - WoodCodeBox
   - StrangeZone
   - Pill
+  - Screamer
   layers:
   - Default
   - TransparentFX

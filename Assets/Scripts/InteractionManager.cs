@@ -43,13 +43,25 @@ public class InteractionManager : MonoBehaviour{
     private int readPaper;
 
     private void Start(){
-        candleLight.enabled = false;
+        if(candleLight != null)
+        {
+            candleLight.enabled = false;
+        }
 
+        if(handImage != null)
+        {
         // отключаем руку
-        handImage.gameObject.SetActive(false);
+            handImage.gameObject.SetActive(false);
+        }
         
-        paperPanel.SetActive(false);
-        woodBoxPanel.SetActive(false);
+        if(paperPanel != null)
+        {
+            paperPanel.SetActive(false);
+        }
+        if(woodBox != null)
+        {
+            woodBoxPanel.SetActive(false);
+        }
 
         isReading = false;
         readPaper = 0;
@@ -224,7 +236,8 @@ public class InteractionManager : MonoBehaviour{
                 }
                 else if(raycastHit.transform.tag == "Pill")
                 {
-                    
+                    gameObject.GetComponentInParent<HealthPoint>().Heal();
+                    Destroy(raycastHit.transform.gameObject);
                 }
             }
             else if(Input.GetKeyDown(KeyCode.Escape))
